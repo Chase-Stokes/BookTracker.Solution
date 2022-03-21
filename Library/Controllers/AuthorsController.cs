@@ -17,12 +17,12 @@ namespace Library.Controllers
     public ActionResult Index()
     {
       List<Author> model = _db.Authors.ToList();
-      return view();
+      return View(model);
     }
     
     public ActionResult Create()
     {
-      return view();
+      return View();
     }
     
     [HttpPost]
@@ -54,7 +54,7 @@ namespace Library.Controllers
       return RedirectToAction("Index");
     }
 
-    public async ActionResult Delete(int id)
+    public ActionResult Delete(int id)
     {
       var thisAuthor = _db.Authors.FirstOrDefault(author => author.AuthorId == id);
       return View(thisAuthor);
