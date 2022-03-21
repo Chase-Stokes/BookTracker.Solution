@@ -12,6 +12,7 @@ namespace Library.Models
     public int CopyId { get; set; }
     public int BookId { get; }
     public int TotalCopies { get; set; }
+    public virtual ApplicationUser User { get; set; }
     public Book Book { get; set; }
     public virtual ICollection<Checkout> JoinEntities { get; set; }
   }

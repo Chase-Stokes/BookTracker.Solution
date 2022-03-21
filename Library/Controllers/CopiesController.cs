@@ -41,11 +41,6 @@ namespace Library.Controllers
       copy.User = currentUser;
       _db.Copies.Add(copy);
       _db.SaveChanges();
-      if (CopyId != 0)
-      {
-          _db.Checkout.Add(new Checkout() { CopyId = CopyId, PatronId = patron.PatronId });
-      }
-      _db.SaveChanges();
       return RedirectToAction("Index");
     }
     
