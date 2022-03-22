@@ -59,9 +59,9 @@ namespace Library.Controllers
 
     public ActionResult Details(int id)
     {
-        // ViewBag.Copies = _db.Copies
-        // .Include(c => c.Book)
-        // .ToList();
+        ViewBag.Copies = _db.Copies
+        .Include(c => c.Book)
+        .ToList();
         Patron thisPatron = _db.Patrons
         .Include(patron => patron.JoinEntitiesOne)
         // .ThenInclude(join => join.Copy)

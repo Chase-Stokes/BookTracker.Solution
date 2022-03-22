@@ -4,6 +4,19 @@
 
 @model Library.Models.Author;
 
+<div id="previous">
+@if (ViewBag.Previous != null)
+{
+  <p>@Html.ActionLink("Previous Author", "Details", "Authors", new { id = ViewBag.Previous.AuthorId })</p>
+}
+</div>
+<div id="next">
+@if (ViewBag.Next != null)
+{
+  <p>@Html.ActionLink("Next Author", "Details", "Authors", new { id = ViewBag.Next.AuthorId })</p>
+}
+</div>
+
 <h2>Author Details</h2>
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
@@ -17,21 +30,10 @@
 else
 {
   <h4>Books the author contains:</h4>
-  <ul>
   @foreach(var join in Model.JoinEntities)
   {
     <li>@Html.ActionLink($"{@join.Book.Title}", "Details", "Books", new { id = @join.Book.BookId })</li>
   }
-  </ul>
-}
-
-@if (ViewBag.Previous != null)
-{
-  <p>@Html.ActionLink("Previous Author", "Details", "Authors", new { id = ViewBag.Previous.AuthorId })</p>
-}
-@if (ViewBag.Next != null)
-{
-  <p>@Html.ActionLink("Next Author", "Details", "Authors", new { id = ViewBag.Next.AuthorId })</p>
 }
 
 <p>@Html.ActionLink("Add a Book", "AddBook", new { id = Model.AuthorId })</p>

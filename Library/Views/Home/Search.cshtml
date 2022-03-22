@@ -1,0 +1,33 @@
+@{
+  Layout = "_Layout";
+}
+
+@model Library.Models.Author
+
+<div class="jumbotron">
+  <h1>Search Results</h1>
+  <h3><span class="a">S</span><span class="b">e</span><span class="b">e</span><span class="c">r</span><span class="d">c</span><span class="e">h</span> <span class="f">f</span><span class="g">u</span><span class="h">r</span> <span class="i">a</span><span class="j">t</span><span class="k">h</span><span class="l">o</span><span class="m">r</span><span class="n">z</span></h3>
+</div>
+
+@using (Html.BeginForm())
+{
+  @Html.TextBoxFor(model => model.Search)
+  <input type="submit" value="Search" />
+}
+<div class="row">
+<button class="btn-warning">A</button><button class="btn-warning">B</button><button class="btn-warning">C</button><button class="btn-success">D</button><button class="btn-warning">E</button><button class="btn-success">F</button><button class="btn-warning">G</button><button class="btn-warning">H</button><button class="btn-warning">I</button><button class="btn-warning">J</button><button class="btn-warning">K</button><button class="btn-warning">L</button><button class="btn-success">M</button><button class="btn-success">@Html.ActionLink("🖕", "Heh", "Home")</button><button class="btn-warning">N</button><button class="btn-warning">O</button><button class="btn-warning">P</button><button class="btn-success">Q</button><button class="btn-warning">R</button><button class="btn-warning">S</button><button class="btn-warning">T</button><button class="btn-warning">U</button><button class="btn-warning">V</button><button class="btn-success">W</button><button class="btn-warning">X</button><button class="btn-success">Y</button><button class="btn-warning">Z</button>
+</div>
+
+
+@if (@ViewBag.Authors.Count == 0)
+{
+  <img src="https://www.liveabout.com/thmb/1PmsRT79lbMxbS-jV-bHZo9RtSQ=/2399x1799/smart/filters:no_upscale()/RageFaceNo-5ae79bcd3128340037321cb4.jpg" width="240" height="200">
+}
+else
+{
+  <h3>Authors from search:</h3>
+  @foreach (var authors in ViewBag.Authors)
+  {
+    <li>@Html.ActionLink($"{authors.Name}", "Details", "Authors", new { id = authors.AuthorId })</li>  
+  } 
+}

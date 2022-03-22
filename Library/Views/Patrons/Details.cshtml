@@ -12,7 +12,6 @@
 
  @if (Model.JoinEntitiesOne.Count > 0)
 {
-  <ul>
   @foreach (Copy copy in Model.JoinEntitiesOne)
   {
     <li>
@@ -24,9 +23,8 @@
       }
     </li>
   }
-  </ul>
 }
-@* 
+
 <h2>Check out a copy to @Model.Name:</h2>
 @using (Html.BeginForm("CheckOut", "Patrons", FormMethod.Post))
 {
@@ -44,6 +42,5 @@
 }
 
 <p>@Html.ActionLink("Back to list", "Index")</p>
-<p>@Html.ActionLink("Select Book", "AddCopy", new { id = Model.PatronId })</p>
+<p>@Html.ActionLink("Delete Patron", "Delete", new { id = Model.PatronId })</p>
 <p>@Html.ActionLink("Edit User Info", "Edit", new { id = Model.PatronId })</p>
-<p>@Html.ActionLink("Return Book", "Delete", new { id = Model.PatronId })</p> *@

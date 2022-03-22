@@ -12,6 +12,7 @@ namespace Library.Models
     public string Name { get; set; }
     public int Age { get; set; }
     public string Description { get; set; }
+    public string Search { get; set; }
     public virtual ICollection<AuthorBook> JoinEntities { get; set; }
   }
 }
