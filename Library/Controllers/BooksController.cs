@@ -23,7 +23,7 @@ namespace Library.Controllers
 
     public ActionResult Index()
     {
-        return View(_db.Books.ToList());
+      return View(_db.Books.ToList());
     }
 
     public ActionResult Create()
@@ -48,9 +48,13 @@ namespace Library.Controllers
     public ActionResult Details(int id)
     {
       var thisBook = _db.Books
-          .Include(book => book.JoinEntities)
-          .ThenInclude(join => join.Author)
-          .FirstOrDefault(book => book.BookId == id);
+        .Include(b => b.JoinEntities)
+        .ThenInclude(join => join.Author)
+        .FirstOrDefault(b => b.BookId == id);
+      var rList = _db.Books.ToList();
+      rList.Reverse();
+      ViewBag.Previous = rList.FirstOrDefault(a => a.BookId < id);
+      ViewBag.Next = _db.Books.FirstOrDefault(a => a.BookId > id);
       return View(thisBook);
     }
 
@@ -75,15 +79,29 @@ namespace Library.Controllers
 
     public ActionResult AddAuthor(int id)
     {
-      var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
-      ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
+      List<Author> authors = _db.Authors.ToList();
+      List<Author> AuthorsList = _db.Authors.ToList();
+      var a = _db.AuthorBook.Where(author => author.BookId == id);
+      foreach(AuthorBook w in a)
+      {
+        foreach(Author author in authors)
+        {
+          if (author.AuthorId == w.AuthorId)
+          {
+            AuthorsList.Remove(author);
+          }
+        }
+      }
+      ViewBag.num = AuthorsList.Count;
+      ViewBag.AuthorId = new SelectList(AuthorsList, "AuthorId", "Name");
+      var thisBook = _db.Books.FirstOrDefault(b => b.BookId == id);
       return View(thisBook);
     }
 
     [HttpPost]
     public ActionResult AddAuthor(Book book, int AuthorId)
     {
-      if (AuthorId != 0)
+      if (AuthorId != 0 && !_db.AuthorBook.Any(f => f.AuthorId == AuthorId && f.BookId == book.BookId))
       {
         _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
       }

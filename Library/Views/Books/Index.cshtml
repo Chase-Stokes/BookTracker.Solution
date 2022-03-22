@@ -9,18 +9,14 @@
 
 @if (Model.Any())
 {
-  <ul>
-    @foreach (Book book in Model)
-    {
-      <li>@Html.ActionLink($"{book.Title}", "Details", new { id = book.BookId })</li>
-    }
-  </ul>
+  @foreach (Book book in Model)
+  {
+    <li>@Html.ActionLink($"{book.Title}", "Details", new { id = book.BookId })</li>
+  }
 } 
 else
 {
   <h3>No books have been added yet!</h3>
 }
 
-<p>@Html.ActionLink("Add new book", "Create")</p>
-
-<p>@Html.ActionLink("Home", "Index", "Home")</p>
+<p>@Html.ActionLink("Add new Book", "Create")</p>

@@ -20,11 +20,21 @@ else
   <ul>
   @foreach(var join in Model.JoinEntities)
   {
-    <li>@join.Book.Title</li>
+    <li>@Html.ActionLink($"{@join.Book.Title}", "Details", "Books", new { id = @join.Book.BookId })</li>
   }
   </ul>
 }
 
-<p>@Html.ActionLink("Back to authorss", "Index")</p>
+@if (ViewBag.Previous != null)
+{
+  <p>@Html.ActionLink("Previous Author", "Details", "Authors", new { id = ViewBag.Previous.AuthorId })</p>
+}
+@if (ViewBag.Next != null)
+{
+  <p>@Html.ActionLink("Next Author", "Details", "Authors", new { id = ViewBag.Next.AuthorId })</p>
+}
+
+<p>@Html.ActionLink("Add a Book", "AddBook", new { id = Model.AuthorId })</p>
+<p>@Html.ActionLink("Back to authors", "Index")</p>
 <p>@Html.ActionLink("Edit Author", "Edit", new { id = Model.AuthorId })</p>
 <p>@Html.ActionLink("Delete Author", "Delete", new { id = Model.AuthorId })</p>

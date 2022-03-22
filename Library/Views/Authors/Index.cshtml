@@ -11,12 +11,9 @@
   <h3>No authors have been added yet!</h3>
 } 
 
-<ul>
-  @foreach(Author author in Model)
-  {
-    <li>@Html.ActionLink($"{author.Name}", "Details", new { id = author.AuthorId })</li>
-  }
-</ul>
+@foreach(Author author in Model)
+{
+  <li>@Html.ActionLink($"{author.Name}", "Details", new { id = author.AuthorId })</li>
+}
 
 <p>@Html.ActionLink("Add new Author", "Create")</p>
-<p>@Html.ActionLink("Home", "Index", "Home")</p>

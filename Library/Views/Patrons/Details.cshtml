@@ -1,0 +1,49 @@
+@{
+  Layout = "_Layout";
+}
+
+@using Library.Models
+@model Library.Models.Patron
+
+<h2>@Model.Name Details:</h2>
+
+
+<h2>@Model.Name checked out books:</h2>
+
+ @if (Model.JoinEntitiesOne.Count > 0)
+{
+  <ul>
+  @foreach (Copy copy in Model.JoinEntitiesOne)
+  {
+    <li>
+      @copy.Book.Title (Copy Id: @copy.CopyId)
+      @using (Html.BeginForm("CheckIn", "Patrons", FormMethod.Post))
+      {
+        <input type="hidden" name="CopyId" value=@copy.CopyId />
+        <input type="submit" value="Check copy back in" class="btn btn-dark" />
+      }
+    </li>
+  }
+  </ul>
+}
+@* 
+<h2>Check out a copy to @Model.Name:</h2>
+@using (Html.BeginForm("CheckOut", "Patrons", FormMethod.Post))
+{
+  <select name="CopyId">
+    @foreach (Copy copy in ViewBag.Copies)
+    {
+      if (copy.Checkout == false)
+      {
+        <option value=@copy.CopyId>@copy.CopyId - @copy.Book.Title</option>
+      }
+    }
+  </select>
+  <input type="hidden" name="PatronId" value=@Model.PatronId />
+  <input type="submit" value="Check out copy" class="btn btn-dark" />
+}
+
+<p>@Html.ActionLink("Back to list", "Index")</p>
+<p>@Html.ActionLink("Select Book", "AddCopy", new { id = Model.PatronId })</p>
+<p>@Html.ActionLink("Edit User Info", "Edit", new { id = Model.PatronId })</p>
+<p>@Html.ActionLink("Return Book", "Delete", new { id = Model.PatronId })</p> *@

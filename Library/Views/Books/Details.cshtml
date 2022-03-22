@@ -4,6 +4,19 @@
 
 @model Library.Models.Book
 
+<div id="previous">
+@if (ViewBag.Previous != null)
+{
+  <p>@Html.ActionLink("Previous Book", "Details", "Books", new { id = ViewBag.Previous.BookId })</p>
+}
+</div>
+<div id="next">
+@if (ViewBag.Next != null)
+{
+  <p>@Html.ActionLink("Next Book", "Details", "Books", new { id = ViewBag.Next.BookId })</p>
+}
+</div>
+
 <h2>Book Details</h2>
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Title): @Html.DisplayFor(model => model.Title)</h3>
@@ -18,21 +31,19 @@
 else
 {
   <h4>Authors the book belongs to:</h4>
-  <ul>
+  
   @foreach(var join in Model.JoinEntities)
   {
-    <li>@join.Author.Name</li>
+    <li>@Html.ActionLink($"{@join.Author.Name}", "Details", "Authors", new { id = @join.Author.AuthorId })</li>
     @using (Html.BeginForm("DeleteAuthor", "Books"))
     {
       @Html.Hidden("joinId", @join.AuthorBookId)
       <input type="submit" value="Delete"/>
     }
   }
-  </ul>
 }
 
 <p>@Html.ActionLink("Add an author", "AddAuthor", new { id = Model.BookId })</p>
-
 <p>@Html.ActionLink("Back to list", "Index")</p>
 <p>@Html.ActionLink("Edit book info", "Edit", new { id = Model.BookId })</p>
 <p>@Html.ActionLink("Delete book", "Delete", new { id = Model.BookId })</p>

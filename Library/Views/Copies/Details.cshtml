@@ -1,0 +1,24 @@
+@* @{
+  Layout = "_Layout";
+}
+
+@model Library.Models.Copy;
+
+@if(@Model.JoinEntities.Count == 0)
+{
+  <p>This book is not checked out.</p>
+}
+else
+{
+  <h4>Patrons with checked out books:</h4>
+  <ul>
+  @foreach(var join in Model.JoinEntities)
+  {
+    <li>@join.Patron.Name</li>
+  }
+  </ul>
+}
+
+<p>@Html.ActionLink("Back to categories", "Index")</p>
+<p>@Html.ActionLink("Edit Copy Amount", "Edit", new { id = Model.CopyId })</p>
+<p>@Html.ActionLink("Remove Book Amount", "Delete", new { id = Model.CopyId })</p> *@

@@ -1,0 +1,13 @@
+@* @{
+  Layout = "_Layout";
+}
+
+@model Library.Models.Copy
+
+@using (Html.BeginForm())
+{
+  @Html.LabelFor(model => model.TotalCopies)
+  @Html.TextBoxFor(model => model.TotalCopies)
+  <input type="submit" value="Donate Books" />
+}
+<p>@Html.ActionLink("Show Book Amount", "Index")</p> *@

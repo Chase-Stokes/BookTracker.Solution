@@ -1,0 +1,20 @@
+@* @{
+  Layout = "_Layout";
+}
+
+@model Library.Models.Patron
+
+
+<h4>Select a book to checkout: @Html.DisplayFor(model => model.Name)</h4>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.PatronId)
+
+    @Html.Label("Select your book")
+    @Html.DropDownList("BookId")
+
+    <input type="submit" value="Save" />
+}
+
+<p>@Html.ActionLink("Back to list", "Index")</p> *@

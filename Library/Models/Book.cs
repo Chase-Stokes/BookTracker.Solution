@@ -16,5 +16,6 @@ namespace Library.Models
     public DateTime Published { get; set; }
 
     public virtual ICollection<AuthorBook> JoinEntities { get; }
+    public virtual ICollection<Copy> JoinEntitiesOne {get;}
   }
 }

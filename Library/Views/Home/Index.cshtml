@@ -2,6 +2,24 @@
   Layout = "_Layout";
 }
 
+@model IEnumerable<Library.Models.Book>
+
 <h1>Welcome to the library!</h1>
 <p>@Html.ActionLink("See all books", "Index", "Books")</p> 
 <p>@Html.ActionLink("See all authors", "Index", "Authors")</p>
+<div id="header">
+@if (@User.Identity.Name != null)
+{
+  <p>@User.Identity.Name</p>
+  <p>@Html.ActionLink("My Account", "", "Account")</p>
+  @using (Html.BeginForm("LogOff", "Account"))
+  {
+    <input type="submit" class="btn btn-default" value="Log out" />
+  }
+}
+else
+{
+  <p>@Html.ActionLink("Register", "Register", "Account")</p>
+  <p>@Html.ActionLink("Login", "Login", "Account")</p>
+}
+</div>

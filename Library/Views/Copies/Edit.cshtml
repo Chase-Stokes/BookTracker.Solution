@@ -1,0 +1,19 @@
+@* @{
+  Layout = "_Layout";
+}
+
+@model Library.Models.Copy
+
+
+<h4>Edit the amount of books: @Html.DisplayFor(model => model.Book.Title)</h4>
+
+@using (Html.BeginForm())
+{
+  @Html.HiddenFor(model => model.CopyId)
+
+  @Html.LabelFor(model => model.TotalCopies)
+  @Html.EditorFor(model => model.TotalCopies)
+
+  <input type="submit" value="Save" />
+}
+<p>@Html.ActionLink("Back to list", "Index")</p> *@
