@@ -39,7 +39,8 @@ namespace Library.Controllers
       _db.SaveChanges();
       if (AuthorId != 0)
       {
-          _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
+        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
+        _db.Copies.Add(new Copy() {BookId = book.BookId});
       }
       _db.SaveChanges();
       return RedirectToAction("Index");

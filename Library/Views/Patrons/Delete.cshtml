@@ -2,13 +2,24 @@
   Layout = "_Layout";
 }
 
-@model Library.Models.Patron
 
-<h2>Are you sure you want to remove this patron?</h2>
+@model Library.Models.Copy
 
-@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)
+<h2>Are you sure you want to turn this in?</h2>
+@ViewBag.test;
+@Html.DisplayNameFor(model => model.Book.Title): @Html.DisplayFor(model => model.Book.Title)
 @using (Html.BeginForm())
 {
-    <input type="submit" value="Delete" />
+  <input type="submit" value="Delete" />
 } 
 @Html.ActionLink("Checked out Books", "Index")
+
+@* @foreach(Copy copy in Model.JoinEntitiesOne)
+{
+  <li>@copy.Book.Title</li>
+  @using (Html.BeginForm("DeleteCopy", "Patrons"))
+  {
+    @Html.Hidden("joinId", @copy.CopyId)
+    <input type="submit" value="Delete"/>
+  }
+}*@

@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Collections.Generic;
+using System;
 
 namespace Library.Controllers
 {
-    [Authorize]
-    public class PatronsController : Controller
+  [Authorize]
+  public class PatronsController : Controller
   {
     private readonly LibraryContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -25,25 +26,18 @@ namespace Library.Controllers
 
     public ActionResult Index()
     {
-        return View(_db.Patrons.ToList());
+      return View(_db.Patrons.ToList());
     }
-    // public async Task<ActionResult> Index()
-    // {
-    //     var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    //     var currentUser = await _userManager.FindByIdAsync(userId);
-    //     var userItems = _db.Patrons.Where(entry => entry.User.Id == currentUser.Id).ToList();
-    //     return View(userItems);
-    // }
 
     public ActionResult Create()
     {
-        ViewBag.CopyId = new SelectList(_db.Copies, "CopyId", "Name");
-        return View();
+      ViewBag.CopyId = new SelectList(_db.Copies, "CopyId", "Name");
+      return View();
     }
 
     [HttpPost]
-  public async Task<ActionResult> Create(Patron patron, int CopyId)
-  {
+    public async Task<ActionResult> Create(Patron patron, int CopyId)
+    {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
       patron.User = currentUser;
@@ -51,30 +45,30 @@ namespace Library.Controllers
       _db.SaveChanges();
       if (CopyId != 0)
       {
-          _db.Checkout.Add(new Checkout() { CopyId = CopyId, PatronId = patron.PatronId });
+        _db.Checkout.Add(new Checkout() { CopyId = CopyId, PatronId = patron.PatronId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
-  }
+    }
 
     public ActionResult Details(int id)
-    {
-        ViewBag.Copies = _db.Copies
-        .Include(c => c.Book)
-        .ToList();
-        Patron thisPatron = _db.Patrons
+    { 
+      ViewBag.Test = _db.Copies.ToList().Count;
+      Patron thisPatron = _db.Patrons
         .Include(patron => patron.JoinEntitiesOne)
-        // .ThenInclude(join => join.Copy)
         .ThenInclude(join => join.Book)
         .FirstOrDefault(patron => patron.PatronId == id);
-        return View(thisPatron);
+      ViewBag.Books = _db.Books
+        .Include(b => b.JoinEntitiesOne)
+        .FirstOrDefault(c => c.BookId == c.BookId);
+      return View(thisPatron);
     }
 
     public ActionResult Edit(int id)
     {
-        var thisPatron = _db.Patrons.FirstOrDefault(patron => patron.PatronId == id);
-        ViewBag.CopyId = new SelectList(_db.Copies, "CopyId", "Name");
-        return View(thisPatron);
+      var thisPatron = _db.Patrons.FirstOrDefault(patron => patron.PatronId == id);
+      ViewBag.CopyId = new SelectList(_db.Copies, "CopyId", "Name");
+      return View(thisPatron);
     }
 
     [HttpPost]
@@ -88,69 +82,59 @@ namespace Library.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-
-    [HttpPost]
-    public ActionResult CheckOut(int CopyId, int PatronId)
+      public ActionResult CheckOut(int id)
     {
-      Copy target = _db.Copies.FirstOrDefault(copy => copy.CopyId == CopyId);
-      target.PatronId = PatronId;
-      target.Checkout = true;
-      _db.Entry(target).State = EntityState.Modified;
-      _db.SaveChanges();
-      return RedirectToAction("Details", new {id = PatronId});
+      var thisPatron = _db.Patrons.FirstOrDefault(patron => patron.PatronId == id);
+      ViewBag.BookId = new SelectList(_db.Books, "BookId", "Title");
+      return View(thisPatron);
     }
 
     [HttpPost]
-    public ActionResult CheckIn(int CopyId)
+    public ActionResult CheckOut(Book book, int PatronId)
     {
-      Copy target = _db.Copies.FirstOrDefault(copy => copy.CopyId == CopyId);
-      int patronId = target.PatronId;
-      target.Checkout = false;
-      _db.Entry(target).State = EntityState.Modified;
-      _db.SaveChanges(); 
-      return RedirectToAction("Details", new {id = patronId});
-    }
-
-    // public ActionResult AddCopy(int id)
-    // {
-    //     var thisPatron = _db.Patrons.FirstOrDefault(patron => patron.PatronId == id);
-    //     ViewBag.CopyId = new SelectList(_db.Copies, "CopyId", "Name");
-    //     return View(thisPatron);
-    // }
-
-    // [HttpPost]
-    // public ActionResult AddCopy(Patron patron, int CopyId)
-    // {
-    //     if (CopyId != 0)
-    //     {
-    //       _db.Checkout.Add(new Checkout() { CopyId = CopyId, PatronId = patron.PatronId });
-    //       _db.SaveChanges();
-    //     }
-    //     return RedirectToAction("Index");
-    // }
-
-    public ActionResult Delete(int id)
-    {
-        var thisPatron = _db.Patrons.FirstOrDefault(p => p.PatronId == id);
-        return View(thisPatron);
-    }
-
-    [HttpPost, ActionName("Delete")]
-    public ActionResult DeleteConfirmed(int id)
-    {
-        var thisPatron = _db.Patrons.FirstOrDefault(p => p.PatronId == id);
-        _db.Patrons.Remove(thisPatron);
+      if (book.BookId != 0)
+      {
+        _db.Copies.Add(new Copy() { BookId = book.BookId, PatronId = PatronId });
         _db.SaveChanges();
-        return RedirectToAction("Index");
+      }
+      return RedirectToAction("Index");
     }
 
     // [HttpPost]
-    // public ActionResult DeleteCopy(int joinId)
+    // public ActionResult CheckIn(int CopyId)
     // {
-    //     var joinEntry = _db.Checkout.FirstOrDefault(entry => entry.CheckoutId == joinId);
-    //     _db.Checkout.Remove(joinEntry);
-    //     _db.SaveChanges();
-    //     return RedirectToAction("Index");
+    //   Copy target = _db.Copies.FirstOrDefault(copy => copy.CopyId == CopyId);
+    //   _db.Entry(target).State = EntityState.Modified;
+    //   _db.SaveChanges(); 
+    //   return RedirectToAction("Details", new {id = patronId});
     // }
+
+    public ActionResult Delete(int CopyId)
+    {
+      var thisCopy = _db.Copies.FirstOrDefault(c => c.CopyId == CopyId);
+      //ViewBag.test = _db.Books.FirstOrDefault(b => b.BookId == thisCopy.BookId);
+      ViewBag.test = CopyId;
+      Console.WriteLine("delete get post");
+      return View(thisCopy);
+    }
+
+    // [HttpPost, ActionName("Delete")]
+    // public ActionResult DeleteConfirmed(int id)
+    // {
+    //   var thisPatron = _db.Patrons.FirstOrDefault(p => p.PatronId == id);
+    //   _db.Patrons.Remove(thisPatron);
+    //   _db.SaveChanges();
+    //   return RedirectToAction("Index");
+    // }
+
+    [HttpPost]
+    public ActionResult Delete(int CopyId, string test)
+    {
+      var joinEntry = _db.Copies.FirstOrDefault(entry => entry.CopyId == CopyId);
+      Console.WriteLine("ddddelete post");
+      _db.Copies.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
   }
 }

@@ -1,13 +1,14 @@
-@* @{
+@{
   Layout = "_Layout";
 }
 
-@model Library.Models.Copy
+@model Library.Models.Patron
 
 @using (Html.BeginForm())
 {
-  @Html.LabelFor(model => model.TotalCopies)
-  @Html.TextBoxFor(model => model.TotalCopies)
-  <input type="submit" value="Donate Books" />
+  @Html.HiddenFor(model => model.PatronId)
+  @Html.Label("Select Book")
+  @Html.DropDownList("BookId")
+
+  <input type="submit" value="CheckOut" />
 }
-<p>@Html.ActionLink("Show Book Amount", "Index")</p> *@

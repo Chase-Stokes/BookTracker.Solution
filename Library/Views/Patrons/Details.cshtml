@@ -16,7 +16,7 @@
   {
     <li>
       @copy.Book.Title (Copy Id: @copy.CopyId)
-      @using (Html.BeginForm("CheckIn", "Patrons", FormMethod.Post))
+      @using (Html.BeginForm("Delete", "Patrons", FormMethod.Post))
       {
         <input type="hidden" name="CopyId" value=@copy.CopyId />
         <input type="submit" value="Check copy back in" class="btn btn-dark" />
@@ -25,21 +25,9 @@
   }
 }
 
-<h2>Check out a copy to @Model.Name:</h2>
-@using (Html.BeginForm("CheckOut", "Patrons", FormMethod.Post))
-{
-  <select name="CopyId">
-    @foreach (Copy copy in ViewBag.Copies)
-    {
-      if (copy.Checkout == false)
-      {
-        <option value=@copy.CopyId>@copy.CopyId - @copy.Book.Title</option>
-      }
-    }
-  </select>
-  <input type="hidden" name="PatronId" value=@Model.PatronId />
-  <input type="submit" value="Check out copy" class="btn btn-dark" />
-}
+<p>@Html.ActionLink("Check Out A Book", "CheckOut", new { id = Model.PatronId } )</p>
+
+
 
 <p>@Html.ActionLink("Back to list", "Index")</p>
 <p>@Html.ActionLink("Delete Patron", "Delete", new { id = Model.PatronId })</p>

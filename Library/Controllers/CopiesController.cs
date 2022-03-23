@@ -1,48 +1,54 @@
-// using Microsoft.EntityFrameworkCore;
-// using Microsoft.AspNetCore.Mvc;
-// using Library.Models;
-// using System.Collections.Generic;
-// using System.Linq;
-// using Microsoft.AspNetCore.Authorization;
-// using Microsoft.AspNetCore.Identity;
-// using System.Threading.Tasks;
-// using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Library.Models;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
-// namespace Library.Controllers
-// {
-//   [Authorize]
-//   public class CopiesController : Controller
-//   {
-//     private readonly LibraryContext _db;
-//     private readonly UserManager<ApplicationUser> _userManager;
-//     public CopiesController(UserManager<ApplicationUser> userManager, LibraryContext db)
-//     {
-//       _userManager = userManager;
-//       _db = db;
-//     }
-//     public async Task<ActionResult> Index()
-//     {
-//       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-//       var currentUser = await _userManager.FindByIdAsync(userId);
-//       var userCopies = _db.Copies.Where(entry => entry.User.Id == currentUser.Id).ToList();
-//       return View(userCopies);
-//     }
+namespace Library.Controllers
+{
+  [Authorize]
+  public class CopiesController : Controller
+  {
+    private readonly LibraryContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
+    public CopiesController(UserManager<ApplicationUser> userManager, LibraryContext db)
+    {
+      _userManager = userManager;
+      _db = db;
+    }
+    public async Task<ActionResult> Index()
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      var userCopies = _db.Copies.Where(entry => entry.User.Id == currentUser.Id).ToList();
+      return View(userCopies);
+    }
     
-//     public ActionResult Create()
-//     {
-//       return View();
-//     }
+    public ActionResult Create()
+    {
+      var thisPatron = _db.Patrons.FirstOrDefault(p => p.PatronId == 1);
+      ViewBag.BookId = new SelectList(_db.Books, "BookId", "Title");
+      return View(thisPatron);
+      //var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      //ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+      //return View(thisItem);
+    }
     
-//     [HttpPost]
-//     public async Task<ActionResult> Create(Copy copy, int PatronId)
-//     {
-//       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-//       var currentUser = await _userManager.FindByIdAsync(userId);
-//       copy.User = currentUser;
-//       _db.Copies.Add(copy);
-//       _db.SaveChanges();
-//       return RedirectToAction("Index");
-//     }
+    [HttpPost]
+    public async Task<ActionResult> Create(Copy copy, int BookId)
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      copy.User = currentUser;
+      _db.Copies.Add(copy);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
     
 //     public ActionResult Details(int id)
 //     {
@@ -80,5 +86,5 @@
 //       _db.SaveChanges();
 //       return RedirectToAction("Index");
 //     }
-//   }
-// }
+  }
+}

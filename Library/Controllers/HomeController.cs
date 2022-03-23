@@ -26,7 +26,7 @@ namespace Library.Controllers
       return View();
     }
 
-     public ActionResult Search(string Search)
+    public ActionResult Search(string Search)
     {
       var authors = _db.Authors.Where(author => (author.Name.Contains(Search) || (author.Name == Search))).ToList();
       ViewBag.Authors = authors;
